@@ -22,9 +22,9 @@ public class PoiController {
 	@GetMapping("/generateWord")
 	public ApiReturnObject  generateWord(String data){
 			//图片路径，请注意你是linux还是windows
-			String wordPath="C:\\Users\\Administrator\\Desktop\\";
+			String wordPath="/Users/kingsley/Documents/";
 			String modelName="人物模板.docx";
-			String outputName="hanyunxi.docx";
+			String outputName="导出.docx";
 			Map<String, Object> datas = new HashMap<String, Object>() {
 				{
 					//本地图片
@@ -39,14 +39,14 @@ public class PoiController {
 						add(new TextRenderData("FF00FF", "2015年 发行出道两周年EP《青春的约定》"));
 						add(new TextRenderData("FF00FF", "2016年 主演玄幻剧《九州天空城》"));
 					}}));
-					put("tables", new TableRenderData(new ArrayList<RenderData>(){{
-						add(new TextRenderData("d0d0d0", "节目"));
-						add(new TextRenderData("d0d0d0", "次数"));
-					}},new ArrayList<Object>(){{
-						add("《SNH星剧院公演》;999");
-						add("《敢ZUO敢为女声秀》;4");
-						add("《快乐大本营》;2");
-					}}, "no datas", 10600));
+//					put("tables", new TableRenderData(new ArrayList<RenderData>(){{
+//						add(new TextRenderData("d0d0d0", "节目"));
+//						add(new TextRenderData("d0d0d0", "次数"));
+//					}},new ArrayList<Object>(){{
+//						add("《SNH星剧院公演》;999");
+//						add("《敢ZUO敢为女声秀》;4");
+//						add("《快乐大本营》;2");
+//					}}, "no datas", 10600));
 //				//网路图片
 				put("picture", new PictureRenderData(200, 250, ".png", BytePictureUtils.getUrlByteArray("https://pic.baike.soso.com/ugc/baikepic2/18293/cut-20170602162513-2088410512.jpg/300")));
 
