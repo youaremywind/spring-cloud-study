@@ -22,9 +22,10 @@ public class PoiController {
 	@GetMapping("/generateWord")
 	public ApiReturnObject  generateWord(String data){
 			//图片路径，请注意你是linux还是windows
-			String wordPath="/Users/kingsley/Documents/";
+			String wordPath="C:\\Users\\youar\\Desktop\\";
+//		String wordPath="/Users/kingsley/Documents/";
 			String modelName="人物模板.docx";
-			String outputName="导出.docx";
+			String outputName="hanyunxi.docx";
 			Map<String, Object> datas = new HashMap<String, Object>() {
 				{
 					//本地图片
