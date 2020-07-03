@@ -3,6 +3,7 @@ package com.softdev.system.demo.controller;
 
 import com.deepoove.poi.data.PictureRenderData;
 import com.deepoove.poi.util.BytePictureUtils;
+import com.softdev.system.demo.example.Course;
 import com.softdev.system.demo.example.DetailData;
 import com.softdev.system.demo.example.DetailTablePolicy;
 import com.softdev.system.demo.example.PaymentData;
@@ -21,6 +22,7 @@ import com.deepoove.poi.data.style.Style;
 import com.deepoove.poi.data.style.TableStyle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +31,8 @@ import java.util.List;
 public class PaymentController {
     @RequestMapping(method = RequestMethod.POST,value = "/paymentWord",produces = "application/json;charset=UTF-8")
     public ApiReturnObject generateWord(@RequestBody PaymentData paymentData) throws IOException {
-        String resource = "/Users/kingsley/Documents/payment.docx";
+//        String resource = "/Users/kingsley/Documents/payment.docx";
+        String resource = "C:\\Users\\youar\\Desktop\\payment.docx";
         PaymentData datas = new PaymentData();
 
         Style headTextStyle = new Style();
@@ -37,7 +40,8 @@ public class PaymentController {
         TableStyle rowStyle = new TableStyle();
         headTextStyle.setFontFamily("Hei");
         headTextStyle.setFontSize(9);
-        headTextStyle.setColor("7F7F7F");
+        headTextStyle.setColor("ff0000");
+        headTextStyle.setBold(true);
 
         headStyle.setBackgroundColor("F2F2F2");
         headStyle.setAlign(STJc.CENTER);
@@ -50,33 +54,23 @@ public class PaymentController {
         if (null!=paymentData.getTelephone()){
             datas.setTelephone(paymentData.getTelephone());
         }
-        if (null!=paymentData.getName()){
-            datas.setAddAmounts(paymentData.getName());
+        if (null!=paymentData.getAddAmounts()){
+            datas.setAddAmounts(paymentData.getAddAmounts());
         }
-        if (null!=paymentData.getName()){
-            datas.setAllAmounts(paymentData.getName());
+        if (null!=paymentData.getAllAmounts()){
+            datas.setAllAmounts(paymentData.getAllAmounts());
         }
-        if (null!=paymentData.getName()){
-            datas.setAveragePrice(paymentData.getName());
+        if (null!=paymentData.getAveragePrice()){
+            datas.setAveragePrice(paymentData.getAveragePrice());
         }
         if (null!=paymentData.getTotal()){
             datas.setTotal(paymentData.getTotal());
         }
+
         if (paymentData.getCourses().size()>0){
             datas.setCourses(paymentData.getCourses());
         }
-        datas.setName("kkklll");
-        datas.setTelephone("187xxxxxxxx");
-        datas.setAddAmounts("1244");
-        datas.setAllAmounts("212");
-        datas.setAveragePrice("112");
-        datas.setTotal("222000");
-//        datas.setSubtotal("8000");
-//        datas.setTax("600");
-//        datas.setTransform("120");
-//        datas.setOther("250");
-//        datas.setUnpay("6600");
-//        datas.setTotal("总共：7200");
+        List<Course> lists =paymentData.getCourses();
 //
 //        RowRenderData header = RowRenderData.build(new TextRenderData("日期", headTextStyle),
 //                new TextRenderData("订单编号", headTextStyle), new TextRenderData("销售代表", headTextStyle),
@@ -90,11 +84,16 @@ public class PaymentController {
 //                MiniTableRenderData.WIDTH_A4_MEDIUM_FULL);
 //        miniTableRenderData.setStyle(headStyle);
 //        datas.setOrder(miniTableRenderData);
-
+        List<RowRenderData> goods = new ArrayList<>();
         DetailData detailTable = new DetailData();
-        RowRenderData good = RowRenderData.build("English", "204", "60", "12240");
-        good.setRowStyle(rowStyle);
-        List<RowRenderData> goods = Arrays.asList(good, good, good);
+        RowRenderData good =null;
+        for (Course c:lists
+             ) {
+            good = RowRenderData.build(new TextRenderData(c.getCourseName(), headTextStyle), new TextRenderData(c.getCoursePrices()+"元", headTextStyle),
+                    new TextRenderData(c.getCourseAmounts()+"课时", headTextStyle), new TextRenderData(c.getCourseTotal()+"元", headTextStyle));
+            good.setRowStyle(rowStyle);
+            goods.add(good);
+        }
 //        RowRenderData labor = RowRenderData.build("油漆工", "2", "200", "400");
 //        labor.setRowStyle(rowStyle);
         //        条数
@@ -102,8 +101,6 @@ public class PaymentController {
         detailTable.setGoods(goods);
 //        detailTable.setLabors(labors);
         datas.setDetailTable(detailTable);
-
-
         //        输出文档
         Configure config = Configure.newBuilder().bind("detail_table", new DetailTablePolicy()).build();
         XWPFTemplate template = XWPFTemplate.compile(resource, config).render(datas);
